@@ -13,7 +13,7 @@ namespace UntitledGame.World
 
         public void Step()
         {
-
+            // This should simulate physics for the current frame.
         }
     }
 }

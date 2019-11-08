@@ -19,6 +19,7 @@ namespace UntitledGame.EntityManagement
 
         public void Bind(EntityManager manager)
         {
+            // If this entity already has an owner, the user is doing something stupid.
             if(EntityManager != null)
             {
                 throw new InvalidOperationException("Entity already bound to an EntityManager.");
@@ -28,6 +29,7 @@ namespace UntitledGame.EntityManagement
 
         public void Unbind()
         {
+            // If the user hasn't bound this entity yet, we've probably hit an unexpected state.
             if(EntityManager == null)
             {
                 throw new InvalidOperationException("Entity not bound to an EntityManager.");
@@ -35,19 +37,23 @@ namespace UntitledGame.EntityManagement
             EntityManager = null;
         }
 
+
         public bool ContainsComponent<T>() where T : IComponent
         {
             return _components.Any(c => c is T);
         }
+
         public bool ContainsComponent(Type componentType)
         {
             return _components.Any(c => c.GetType() == componentType);
         }
 
+
         public void AddComponent(IComponent component)
         {
             _components.Add(component);
 
+            // So long as we have an owner, notify listeners that our composition has changed.
             if (EntityManager != null)
             {
                 EntityManager.MessageDispatcher.Invoke(EntityManager.MESSAGE_ENTITY_ALTERED, this);
@@ -58,11 +64,13 @@ namespace UntitledGame.EntityManagement
         {
             _components.Remove(component);
 
+            // So long as we have an owner, notify listeners that our composition has changed.
             if (EntityManager != null)
             {
                 EntityManager.MessageDispatcher.Invoke(EntityManager.MESSAGE_ENTITY_ALTERED, this);
             }
         }
+
 
         public T GetComponent<T>() where T : IComponent
         {

@@ -23,6 +23,7 @@ namespace UntitledGame.World.EntityComponents
                 Y = value.Y;
             }
         }
+
         public Vector2 Size
         {
             get => new Vector2(Width, Height);
@@ -51,6 +52,20 @@ namespace UntitledGame.World.EntityComponents
         public Rectangle GetBoundingRectangle()
         {
             return new Rectangle(Position.ToPoint(), Size.ToPoint());
+        }
+
+        public void Deconstruct(out float x, out float y)
+        {
+            x = X;
+            y = Y;
+        }
+
+        public void Deconstruct(out float x, out float y, out float width, out float height)
+        {
+            x = X;
+            y = Y;
+            width = Width;
+            height = Height;
         }
     }
 }
